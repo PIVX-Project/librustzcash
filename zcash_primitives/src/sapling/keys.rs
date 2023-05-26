@@ -305,12 +305,12 @@ impl DiversifiedTransmissionKey {
     }
 
     /// $abst_J(bytes)$
-    pub(crate) fn from_bytes(bytes: &[u8; 32]) -> CtOption<Self> {
+    pub fn from_bytes(bytes: &[u8; 32]) -> CtOption<Self> {
         jubjub::SubgroupPoint::from_bytes(bytes).map(DiversifiedTransmissionKey)
     }
 
     /// $repr_J(self)$
-    pub(crate) fn to_bytes(self) -> [u8; 32] {
+    pub fn to_bytes(self) -> [u8; 32] {
         self.0.to_bytes()
     }
 
@@ -356,7 +356,7 @@ impl ConstantTimeEq for EphemeralSecretKey {
 }
 
 impl EphemeralSecretKey {
-    pub(crate) fn from_bytes(bytes: &[u8; 32]) -> CtOption<Self> {
+    pub fn from_bytes(bytes: &[u8; 32]) -> CtOption<Self> {
         jubjub::Scalar::from_bytes(bytes).map(EphemeralSecretKey)
     }
 
@@ -416,7 +416,7 @@ impl PreparedEphemeralPublicKey {
 ///
 /// [concretesaplingkeyagreement]: https://zips.z.cash/protocol/protocol.pdf#concretesaplingkeyagreement
 #[derive(Debug)]
-pub struct SharedSecret(jubjub::SubgroupPoint);
+pub struct SharedSecret(pub jubjub::SubgroupPoint);
 
 impl SharedSecret {
     /// For checking test vectors only.
