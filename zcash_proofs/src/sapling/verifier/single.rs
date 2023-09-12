@@ -37,7 +37,7 @@ impl SaplingVerificationContext {
         nullifier: &[u8; 32],
         rk: PublicKey,
         sighash_value: &[u8; 32],
-        spend_auth_sig: Signature,
+        spend_auth_sig: Option<Signature>,
         zkproof: Proof<Bls12>,
         verifying_key: &PreparedVerifyingKey<Bls12>,
     ) -> bool {
@@ -52,7 +52,11 @@ impl SaplingVerificationContext {
             zkproof,
             &mut (),
             |_, rk, msg, spend_auth_sig| {
-                rk.verify_with_zip216(&msg, spend_auth_sig, SPENDING_KEY_GENERATOR, zip216_enabled)
+		if let Some(spend_auth_sig) = spend_auth_sig {
+		    rk.verify_with_zip216(&msg, spend_auth_sig, SPENDING_KEY_GENERATOR, zip216_enabled)
+		} else {
+		    true
+		}
             },
             |_, proof, public_inputs| {
                 verify_proof(verifying_key, &proof, &public_inputs[..]).is_ok()
