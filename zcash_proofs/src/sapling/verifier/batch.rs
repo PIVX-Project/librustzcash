@@ -62,7 +62,7 @@ impl BatchValidator {
                 &spend.nullifier().0,
                 spend.rk(),
                 &sighash,
-                spend.spend_auth_sig(),
+                &Some(*spend.spend_auth_sig()),
                 zkproof,
                 self,
                 |this, rk, _, spend_auth_sig| {
@@ -71,7 +71,9 @@ impl BatchValidator {
                     );
                     let spend_auth_sig = {
                         let mut buf = [0; 64];
-                        spend_auth_sig.write(&mut buf[..]).unwrap();
+			if let Some(spend_auth_sig) = spend_auth_sig {
+                            spend_auth_sig.write(&mut buf[..]).unwrap();
+			}
                         redjubjub::Signature::<redjubjub::SpendAuth>::from(buf)
                     };
 

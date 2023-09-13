@@ -40,10 +40,10 @@ impl SaplingVerificationContextInner {
         nullifier: &[u8; 32],
         rk: &PublicKey,
         sighash_value: &[u8; 32],
-        spend_auth_sig: &Signature,
+        spend_auth_sig: &Option<Signature>,
         zkproof: Proof<Bls12>,
         verifier_ctx: &mut C,
-        spend_auth_sig_verifier: impl FnOnce(&mut C, &PublicKey, [u8; 64], &Signature) -> bool,
+        spend_auth_sig_verifier: impl FnOnce(&mut C, &PublicKey, [u8; 64], &Option<Signature>) -> bool,
         proof_verifier: impl FnOnce(&mut C, Proof<Bls12>, [bls12_381::Scalar; 7]) -> bool,
     ) -> bool {
         // The "cv is not small order" happens when a SpendDescription is deserialized.
